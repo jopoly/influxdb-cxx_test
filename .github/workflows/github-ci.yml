@@ -8,8 +8,8 @@ on:
 env:
   OWNER_GITHUB: "user_name"                      # User name. For example: [user_name] in https://github.com/user_name/your_repository.git
   RPM_ARTIFACT_DIR: "cxx_rpm"                    # Directory name of Artifact to contain rpm files temporary. Default is "cxx_rpm".
+    RPM_DISTRIBUTION_TYPE: "rhel8"               # The distribution operating system name. Default is "rhel8".
   INFLUXDB_CXX_RELEASE_VERSION: "0.0.1"
-  RPM_DISTRIBUTION_TYPE: "rhel8"
 
 jobs:
   # Job 1: ...
