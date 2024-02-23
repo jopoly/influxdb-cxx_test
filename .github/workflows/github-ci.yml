@@ -61,7 +61,9 @@ jobs:
 
   # Job 2: ...
   project_publish:
+    needs: project_build
     runs-on: ubuntu-latest
+    permissions: write-all
 
     steps:
     - name: Checkout Repository
