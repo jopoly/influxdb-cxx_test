@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source env_rpmbuild.conf
+source docker/env_rpmbuild.conf
 set -eE
 
 # create rpm on container environment
@@ -12,14 +12,14 @@ then
                  --build-arg ACCESS_TOKEN=${ACCESS_TOKEN} \
                  --build-arg DISTRIBUTION_TYPE=${RPM_DISTRIBUTION_TYPE} \
                  --build-arg INFLUXDB_CXX_RELEASE_VERSION=${INFLUXDB_CXX_RELEASE_VERSION} \
-                 -f $DOCKERFILE .
+                 -f docker/$DOCKERFILE .
 else
     docker build -t $IMAGE_TAG \
                  --build-arg proxy=${proxy} \
                  --build-arg no_proxy=${no_proxy} \
                  --build-arg DISTRIBUTION_TYPE=${RPM_DISTRIBUTION_TYPE} \
                  --build-arg INFLUXDB_CXX_RELEASE_VERSION=${INFLUXDB_CXX_RELEASE_VERSION} \
-                 -f $DOCKERFILE .
+                 -f docker/$DOCKERFILE .
 fi
 
 # copy binary to outside
@@ -47,6 +47,8 @@ else
                             -H \"Authorization: Bearer ${ACCESS_TOKEN}\" \
                             -H \"X-GitHub-Api-Version: 2022-11-28\" \
                             -H \"Content-Type: application/octet-stream\" \
+                            --retry 20 \
+                            --retry-max-time 120 \
                             --insecure"
     influxdb_cxx_assets_uri="https://uploads.github.com/repos/${OWNER_GITHUB}/${INFLUXDB_CXX_PROJECT_GITHUB}/releases/${INFLUXDB_CXX_RELEASE_ID}/assets"
     binary_dir="--data-binary \"@${RPM_ARTIFACT_DIR}\""
